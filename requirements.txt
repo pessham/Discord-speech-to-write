@@ -1,0 +1,4 @@
+discord.py>=2.3.2
+openai>=1.13.3
+sentence-transformers>=2.2.2
+python-dotenv>=1.0.0
