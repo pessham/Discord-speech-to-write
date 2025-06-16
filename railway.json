@@ -1,0 +1,12 @@
+﻿{
+  "build": {
+    "nixpacks": {
+      "phases": {
+        "setup": {
+          "packages": ["ffmpeg"]
+        }
+      }
+    }
+  },
+  "start": "python bot.py"
+}
