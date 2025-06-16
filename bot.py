@@ -1,3 +1,4 @@
+import os
 import json
 import logging
 from pathlib import Path
@@ -12,9 +13,17 @@ from utils.obsidian import save_and_link
 
 logging.basicConfig(level=logging.INFO)
 
-config = json.load(open("config.json"))
-TOKEN = config["discord_token"]
-VAULT_PATH = Path(config["vault_path"])
+# Prefer environment variables (Railway) and fall back to local config.json for dev
+TOKEN = os.getenv("DISCORD_TOKEN")
+VAULT_PATH_STR = os.getenv("VAULT_PATH")
+if not TOKEN or not VAULT_PATH_STR:
+    try:
+        _cfg = json.load(open("config.json"))
+        TOKEN = TOKEN or _cfg.get("discord_token")
+        VAULT_PATH_STR = VAULT_PATH_STR or _cfg.get("vault_path")
+    except FileNotFoundError:
+        raise RuntimeError("DISCORD_TOKEN/VAULT_PATH env vars not set and config.json not found")
+VAULT_PATH = Path(VAULT_PATH_STR)
 
 intents = discord.Intents.default()
 intents.message_content = True
